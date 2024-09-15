@@ -1,16 +1,22 @@
 ---
+import Layout from "../layouts/Layout.astro";
+import LatencyChecker from '../components/LatencyChecker.astro'
 
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Latency Test" description="Let's Check your Connection 👀">
+	<div class="app">
+		<h1>Latency Tester</h1>
+		<h2>Simple and Fast Latency Checker w/HTTP(s) request 🚀</h2>
+		<LatencyChecker />
+	</div>
+</Layout>
+
+<style>
+	.app {
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+		align-items: center;
+	}
+</style>

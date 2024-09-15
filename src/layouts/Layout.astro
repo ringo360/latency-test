@@ -1,0 +1,48 @@
+---
+interface Props {
+	title: string;
+	description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" href="/favicon.ico">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+		<title>{title}</title>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+<style is:global>
+	:root {
+		--background: #13151a;
+	}
+	@font-face {
+		font-family: 'Monaspace Neon';
+		src: url('/fonts/MonaspaceNeon-Regular.woff') format('woff');
+		font-style: normal;
+		font-display: swap;
+	}
+	@font-face {
+		font-family: 'Montserrat';
+		src: url('/fonts/Montserrat-ExtraLight.woff') format('woff');
+		font-style: normal;
+		font-display: swap;
+	}
+	html {
+		font-family: 'Montserrat', sans-serif;
+		background: var(--background);
+		color: white;
+	}
+	.mona {
+		font-family: 'Monaspace Neon', monospace;
+	}
+</style>

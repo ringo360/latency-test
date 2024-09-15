@@ -1,0 +1,118 @@
+---
+---
+
+<div class="checker-container mona">
+	<div class="result">
+		<p style="margin-right: 0.25em;">Your Latency:</p>
+		<p id="latency">...</p>
+	</div>
+	<input type="button" value="Check" id="checkcaller">
+</div>
+
+<style>
+	.checker-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	.result {
+		display: flex;
+		flex-direction: row;
+		font-size: 2.5em;
+	}
+	#checkcaller {
+		display: flex;
+		font-family: 'Montserrat', sans-serif;
+		background-color: #1b1b1b;
+		border: 0;
+		border-radius: 10px;
+		color: white;
+		padding: 0 2em;
+		font-size: 2em;
+		max-width: 15em;
+		height: 2em;
+		transition: all 0.5s ease;
+	}
+	#checkcaller:hover {
+		color: aqua;
+	}
+	#checkcaller:active {
+		color: gray;
+		transform: scale(0.9);
+	}
+	@keyframes loading {
+		0% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+</style>
+
+<script>
+	//<3 https://github.com/cloudflare/workers.cloudflare.com/blob/master/app/components/latency_test.jsx
+	const Latency_CF = async () => {
+		const TARGET = 'https://1.1.1.1/cdn-cgi/trace'
+		const NUM_TESTS = 5
+		let start = 0
+		async function load() {
+			start++;
+			await fetch(TARGET, {
+				mode: 'no-cors',
+				cache: 'no-store'
+			})
+			if (start < NUM_TESTS) await load()
+		}
+		await load()
+		let entries = performance.getEntriesByName(TARGET, "resource") as any
+		let min = Infinity
+		for (
+			let i = Math.max(0, entries.length - NUM_TESTS);
+			i < entries.length;
+			i++
+		) {
+			// iOS Safari doesn’t report duration
+			const duration = entries[i].duration || entries[i].responseEnd - entries[i].fetchStart
+			if (duration < min) min = duration
+		}
+		return min | 0
+	}
+	const button = document.getElementById('checkcaller')
+	button.addEventListener('click', () => Check())
+	const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+	let checking = false;
+	async function Check() {
+		try {
+			const elem = document.getElementById('latency')
+			checking = true;
+			LatencyAnim(elem)
+			const newLatency = await Latency_CF()
+			if (isNaN(newLatency) || newLatency === 0) {
+				elem.textContent = '?ms'
+			} else {
+				elem.textContent = `${newLatency}ms`
+			}
+			checking = false;
+		} catch (e) {
+			alert(e)
+		}
+	}
+	async function LatencyAnim(elem: HTMLElement) {
+		elem.style.transition = 'opacity 1s ease'
+		elem.style.animationName = 'loading'
+		elem.style.animationDuration = '2s'
+		elem.style.animationIterationCount = 'infinite'
+		while(checking) {
+			await delay(50)
+		}
+		elem.style.transition = ''
+		elem.style.opacity = '1'
+		elem.style.animationName = ''
+		elem.style.animationDuration = ''
+		elem.style.animationIterationCount = ''
+	}
+</script>
