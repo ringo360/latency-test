@@ -51,6 +51,11 @@
 			opacity: 1;
 		}
 	}
+	@media (max-width: 720px) {
+		.result {
+			font-size: 1.5em;
+		}
+	}
 </style>
 
 <script>
@@ -88,6 +93,7 @@
 	async function Check() {
 		try {
 			const elem = document.getElementById('latency')
+			elem.textContent = '...'
 			checking = true;
 			LatencyAnim(elem)
 			const newLatency = await Latency_CF()

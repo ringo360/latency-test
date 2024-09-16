@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404" description='oh no!'>
+	<div>
+		<br>
+		<img src="/chino2.png" />
+		<h1>404</h1>
+		<p><a href="/">are you lost?</a></p>
+	</div>
+</Layout>
+
+<style>
+	html {
+		font-family: system-ui, sans-serif;
+	}
+	div {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+	h1,
+	p{
+		color: white;
+		text-align: center;
+		margin: 0.1em;
+	}
+	a {
+		color: #35c9f7
+	}
+	a:hover {
+		color: aqua;
+	}
+	img {
+		display: block;
+		image-rendering: pixelated;
+		width: 100px;
+		margin-top: 3em;
+	}
+</style>
+
+<!-- Google tag (gtag.js) -->
+<script is:inline src="https://www.googletagmanager.com/gtag/js?id=G-43R6LDMRBM"></script>
+<script is:inline>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-43R6LDMRBM');
+
+</script>
